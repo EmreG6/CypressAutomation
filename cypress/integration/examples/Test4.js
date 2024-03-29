@@ -1,38 +1,37 @@
-describe('handling alerts', function() {
+describe('Handling Alerts, Child Tabs, Web Tables, and Mouse Hover Popups', function() {
 
-    it('handles alerts',function() {
-        // cypress auto accepts alerts and pop-ups
-        // cypress have capability browser events
+    it('Handles alerts', function() {
         cy.visit("https://rahulshettyacademy.com/AutomationPractice/")
+
+        // Clicking on alert button and confirming alert
         cy.get('#alertbtn').click()
         cy.get('[value="Confirm"]').click()
-        // window:alert is the event which get fired on alert open
-        cy.on('window:alert',(str) =>
-        {
-            // assertions come from Mocha
+
+        // Handling alert and confirmation alert
+        cy.on('window:alert', (str) => {
             expect(str).to.be.equal('Hello , share this practice page and share your knowledge')
         })
-        cy.on('window:confirm',(str) =>
-        {
-            // assertions come from Mocha
+        cy.on('window:confirm', (str) => {
             expect(str).to.be.equal('Hello , Are you sure you want to confirm?')
         })
     })
 
-    it('handles child tabs',function() {
+    it('Handles child tabs', function() {
         cy.visit("https://rahulshettyacademy.com/AutomationPractice/")
-        // cy.get("#opentab").click() #opens browser in another tab
-        cy.get("#opentab").invoke('removeAttr','target').click()
-        cy.origin("https://www.qaclickacademy.com",()=>
-       {
-        cy.get("#navbarSupportedContent a[href*='about']").click()
-        cy.get(".mt-50 h2").should('contain','QAClick Academy')
-       })
 
+        // Opening child tab
+        cy.get("#opentab").invoke('removeAttr', 'target').click()
+
+        // Switching to child tab and performing actions
+        cy.origin("https://www.qaclickacademy.com", () => {
+            cy.get("#navbarSupportedContent a[href*='about']").click()
+            cy.get(".mt-50 h2").should('contain', 'QAClick Academy')
+        })
     })
 
     it('Handles web tables', function() {
         cy.visit("https://rahulshettyacademy.com/AutomationPractice/")
+
         // Finding and validating data in web table
         cy.get('tr td:nth-child(2)').each(($e1, index, $list) => {
             const text = $e1.text()
@@ -48,11 +47,11 @@ describe('handling alerts', function() {
 
     it('Handles mouse hover popups', function() {
         cy.visit("https://rahulshettyacademy.com/AutomationPractice/")
-        // cy.get('div.mouse-hover-content').invoke('show')
-        cy.contains('Top').click({force: true})
-        cy.url().should('include','top')
+
+        // Triggering mouse hover popup by clicking
+        cy.contains('Top').click({ force: true })
+
+        // Asserting the URL after clicking
+        cy.url().should('include', 'top')
     })
-
-
-
 })
