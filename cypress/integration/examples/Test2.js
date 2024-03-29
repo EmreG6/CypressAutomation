@@ -1,4 +1,4 @@
-describe('My Second Test Suite', function() {
+describe('Web Controls Interaction', function() {
 
     it('Tests searching for products and adding them to cart', function() {
         // Visit the website

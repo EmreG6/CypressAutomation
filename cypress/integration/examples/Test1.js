@@ -1,4 +1,4 @@
-it('My First Test case', function() {
+it('Product Search and Interaction ', function() {
     // Visit the website
     cy.visit("https://rahulshettyacademy.com/seleniumPractise/#/")
 
