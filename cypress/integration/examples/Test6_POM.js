@@ -5,21 +5,23 @@ import ProductPage from "../pageObjects/ProductPage";
 describe('Performing hooks in POM', () => {
     let testData;
 
-    before(() => {
+    beforeEach(() => {
         cy.fixture('example').then((data) => {
             testData = data;
         });
     });
 
     it('tests with collecting data from fixtures', () => {
-        Cypress.config('defaultCommandTimeout',8000) // Specify the waiting duration for this test (explicit time out)
+        Cypress.config('defaultCommandTimeout', 8000); // Specify the waiting duration for this test (explicit time out)
         const homePage = new HomePage();
         const productPage = new ProductPage();
 
-        cy.visit("https://rahulshettyacademy.com/angularpractice/");
+        cy.visit(Cypress.env('url')+"/angularpractice/")
+
+        // Destructure test data
+        const { name, gender, productName } = testData;
 
         // Fill out the form with test data
-        const { name, gender, productName } = testData; // Destructuring
         homePage.getNameInput().type(name);
         homePage.getGenderDropdown().select(gender);
 
@@ -32,29 +34,17 @@ describe('Performing hooks in POM', () => {
         homePage.getShopTab().click();
 
         // Select products using custom command
-        productName.forEach(product => cy.selectProduct(product));
+        cy.wrap(productName).each(product => cy.selectProduct(product));
 
-        // Validations and check-out operations
-        productPage.checkoutButton().click()
-
-        // Navigate to checkout page
+        // Consolidate checkout steps
+        productPage.checkoutButton().click();
         cy.contains('Checkout').click();
-
-        // Fill out country field
         cy.get('#country').type('Netherlands');
         cy.get(".suggestions > ul > li > a").click();
-
-        // Agree to terms and conditions
         cy.get('#checkbox2').check({force: true});
-
-        // Submit order
         cy.get('input[type="submit"]').click();
 
         // Verify order confirmation message
-        cy.get('.alert').then($element => {
-            const actualText = $element.text();
-            expect(actualText.includes("Success")).to.be.true;
-        });
-
+        cy.get('.alert').should('contain.text', "Success");
     });
 });
