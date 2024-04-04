@@ -1,5 +1,5 @@
 {
-  "name": "Emre",
-  "gender": "Male",
-  "supportFile": "cypress/support/commands.js"
+ "name" :"Emre",
+ "gender":"Male",
+ "productName": ["Blackberry","Nokia Edge"]
 }

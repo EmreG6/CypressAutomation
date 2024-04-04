@@ -1,9 +1,9 @@
 /// <reference types="Cypress" />
 
-describe('Performing hooks', () => {
+describe('Performing hooks', function () {
     let testData;
 
-    before(() => {
+    before(function () {
         // Load test data before each test
         cy.fixture('example').then((data) => {
             testData = data;
@@ -22,8 +22,16 @@ describe('Performing hooks', () => {
         cy.get('input[name="name"]:nth-child(2)').should('have.attr', 'minlength', '2');
         cy.get('#inlineRadio3').should('be.disabled');
 
-        // Navigate to product page and select a product by using commands
+        // Note: Debugging methods
+        // cy.debug()
+        // cy.pause()
+
+        // Navigate to product page
         cy.get(':nth-child(2) > .nav-link').click();
-        cy.selectProduct('BlackBerry');
+
+        // Select products
+        testData.productName.forEach(function (productName) {
+            cy.selectProduct(productName);
+        });
     });
 });
