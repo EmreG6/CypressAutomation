@@ -8,6 +8,16 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 //
+Cypress.Commands.add('selectProduct', (productName) => {
+    // Find all product titles
+    cy.get('h4.card-title').each(($el, index, $list) => {
+        // Check if the product title contains the given productName
+        if ($el.text().includes(productName)) {
+            // Click on the 'Add to Cart' button corresponding to the matched product
+            cy.get("button.btn.btn-info").eq(index).click();
+        }
+    });
+});
 //
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
